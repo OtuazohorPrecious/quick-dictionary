@@ -1,0 +1,16 @@
+{
+  "name": "Quick Dictionary",
+  "short_name": "Dict",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fa",
+  "theme_color": "#2563eb",
+  "description": "Look up English words, hear pronunciation, and see noun images.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%232563eb'/%3E%3Cpath d='M54 48h84a12 12 0 0 1 12 12v72a12 12 0 0 1-12 12H54a12 12 0 0 1-12-12V60a12 12 0 0 1 12-12Zm14 24v24h56V72H68Zm0 36v12h40v-12H68Z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
