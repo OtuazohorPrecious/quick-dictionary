@@ -8,7 +8,7 @@ How it works
 - Images: Wikimedia Commons / Wikipedia API (no key required)
 - Pronunciation: browser SpeechSynthesis API
 
-Deploy to GitHub Pages (one-click publish)
+Deploy to GitHub Pages (simplest publish)
 
 1. Create a repository on GitHub (name it e.g. `quick-dictionary`).
 2. On your machine, from the project folder run:
@@ -22,11 +22,19 @@ git remote add origin https://github.com/<your-username>/<your-repo>.git
 git push -u origin main
 ```
 
-3. The GitHub Actions workflow (.github/workflows/deploy.yml) will automatically run and publish the repository to GitHub Pages. The site will be available at `https://<your-username>.github.io/<your-repo>/`.
+3. In your repo settings, set GitHub Pages to use:
+   - `Branch: main`
+   - `Folder: / (root)`
 
-4. On your phone open the site URL and use the browser menu to "Install app" or "Add to Home Screen".
+4. Wait 1-2 minutes, then open:
+   - `https://<your-username>.github.io/<your-repo>/`
 
-Notes: the workflow publishes the repository contents directly (no build step). If you prefer, I can prepare a branch instead that publishes only a `docs/` folder.
+5. On your phone open that site URL and use the browser menu to "Install app" or "Add to Home Screen".
+
+Notes:
+- No GitHub Actions workflow is required for this simple static site.
+- A blank `.nojekyll` file is included to prevent GitHub Pages from trying to process the site with Jekyll.
+- If you want, I can also publish a `docs/` folder instead, but root publishing is simplest.
 
 Run locally
 
