@@ -30,6 +30,7 @@ button:hover{filter:brightness(0.97)}
 .history-note{margin:4px 0 0;color:#475569;font-size:.93rem}
 .history-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:10px}
 .history-item{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#e0edff;color:#1e40af;cursor:pointer;transition:transform .15s ease,background .15s ease}
+.history-item.placeholder{background:#eef2ff;color:#475569;cursor:default;border-radius:12px}
 .history-item:hover{background:#dbeafe;transform:translateY(-1px)}
 .text-btn{border:none;background:transparent;color:#2563eb;cursor:pointer;font-weight:600;font-size:.95rem;padding:0}
 .hidden{display:none !important}

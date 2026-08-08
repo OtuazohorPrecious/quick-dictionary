@@ -275,14 +275,19 @@ function clearHistory() {
 
 function renderHistory() {
   const history = getHistory();
-  if (!history.length) {
-    historySection?.classList.add('hidden');
-    return;
-  }
   historySection?.classList.remove('hidden');
 
   if (!historyList) return;
   historyList.innerHTML = '';
+
+  if (!history.length) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'history-item placeholder';
+    placeholder.textContent = 'Search a word and your recent searches will appear here.';
+    placeholder.tabIndex = -1;
+    historyList.appendChild(placeholder);
+    return;
+  }
 
   history.forEach(item => {
     const li = document.createElement('li');
