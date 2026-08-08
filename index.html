@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#2563eb" />
   <meta name="description" content="Look up English words, hear pronunciation, and see noun images." />
   <title>Quick Dictionary — Speak & See</title>
@@ -10,23 +10,61 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="container">
-    <h1>Quick Dictionary</h1>
-    <div class="search-row">
-      <input id="wordInput" placeholder="Type a word and press Enter" autofocus />
-      <button id="searchBtn">Lookup</button>
-      <button id="speakBtn" title="Pronounce">🔊</button>
-      <button id="refreshBtn" title="Refresh app">⟳</button>
+  <div id="splashScreen" class="splash-screen" aria-hidden="true">
+    <div class="splash-card">
+      <div class="splash-icon">📖</div>
+      <h2>Quick Dictionary</h2>
+      <p>Launching your word helper…</p>
     </div>
-    <section id="result">
-      <div id="phonetic" class="phonetic"></div>
-      <div id="meanings"></div>
-      <div id="images" class="images"></div>
-    </section>
+  </div>
+
+  <main class="container">
+    <div class="app-shell">
+      <div class="header-bar">
+        <div>
+          <h1>Quick Dictionary</h1>
+          <div id="modeBadge" class="mode-badge">Browser view</div>
+        </div>
+        <button id="refreshBtn" class="icon-btn" title="Refresh app">⟳</button>
+      </div>
+
+      <div class="search-row">
+        <input id="wordInput" placeholder="Type a word and press Enter" autofocus />
+        <button id="searchBtn">Lookup</button>
+        <button id="speakBtn" title="Pronounce">🔊</button>
+      </div>
+
+      <section id="historySection" class="history-panel hidden">
+        <div class="history-header">
+          <div>
+            <h2>Recent searches</h2>
+            <p class="history-note">Tap any word to search it again.</p>
+          </div>
+          <button id="clearHistoryBtn" class="text-btn">Clear</button>
+        </div>
+        <ul id="historyList" class="history-list" aria-label="Recent search history"></ul>
+      </section>
+
+      <section id="result">
+        <div id="phonetic" class="phonetic"></div>
+        <div id="meanings"></div>
+        <div id="images" class="images"></div>
+      </section>
+
+      <div id="installBanner" class="install-banner hidden">
+        <div>
+          <strong>Install this app</strong>
+          <p>Open it like a phone app from your home screen.</p>
+        </div>
+        <button id="installBtn">Install</button>
+      </div>
+    </div>
+
     <footer>
       <small>Uses dictionaryapi.dev and Wikimedia Commons; pronunciation uses your browser's SpeechSynthesis.</small>
     </footer>
   </main>
+
   <script src="app.js"></script>
   <script>
     if ('serviceWorker' in navigator) {

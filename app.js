@@ -5,6 +5,37 @@ const refreshBtn = document.getElementById('refreshBtn');
 const phoneticEl = document.getElementById('phonetic');
 const meaningsEl = document.getElementById('meanings');
 const imagesEl = document.getElementById('images');
+const historySection = document.getElementById('historySection');
+const historyList = document.getElementById('historyList');
+const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+const installBanner = document.getElementById('installBanner');
+const installBtn = document.getElementById('installBtn');
+const splashScreen = document.getElementById('splashScreen');
+const modeBadge = document.getElementById('modeBadge');
+
+const HISTORY_KEY = 'quick-dictionary-history';
+const HISTORY_LIMIT = 10;
+let deferredPrompt = null;
+
+function isStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function updateModeBadge() {
+  if (!modeBadge) return;
+  modeBadge.textContent = isStandalone() ? 'Installed app' : 'Browser view';
+}
+
+function showInstallBanner() {
+  if (!installBanner || isStandalone()) return;
+  installBanner.classList.remove('hidden');
+}
+
+function hideSplashScreen() {
+  if (splashScreen) {
+    splashScreen.classList.add('hidden');
+  }
+}
 
 async function lookup(word) {
   const normalized = word.trim();
@@ -204,12 +235,107 @@ function clearResults() {
   imagesEl.innerHTML = '';
 }
 
+function getHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveHistory(history) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, HISTORY_LIMIT)));
+  } catch (e) {
+    // ignore storage failures
+  }
+}
+
+function addToHistory(word) {
+  const normalized = word.trim().toLowerCase();
+  if (!normalized) return;
+
+  const history = getHistory().filter(item => item !== normalized);
+  history.unshift(normalized);
+  saveHistory(history);
+  renderHistory();
+}
+
+function clearHistory() {
+  try {
+    localStorage.removeItem(HISTORY_KEY);
+  } catch (e) {
+    // ignore storage failures
+  }
+  renderHistory();
+}
+
+function renderHistory() {
+  const history = getHistory();
+  if (!history.length) {
+    historySection?.classList.add('hidden');
+    return;
+  }
+  historySection?.classList.remove('hidden');
+
+  if (!historyList) return;
+  historyList.innerHTML = '';
+
+  history.forEach(item => {
+    const li = document.createElement('li');
+    li.className = 'history-item';
+    li.textContent = item;
+    li.tabIndex = 0;
+    li.addEventListener('click', () => {
+      wordInput.value = item;
+      lookup(item);
+    });
+    li.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        wordInput.value = item;
+        lookup(item);
+      }
+    });
+    historyList.appendChild(li);
+  });
+}
+
 searchBtn.addEventListener('click', () => lookup(wordInput.value));
 wordInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') lookup(wordInput.value);
 });
 speakBtn.addEventListener('click', () => speak(wordInput.value));
 refreshBtn?.addEventListener('click', () => window.location.reload());
+
+clearHistoryBtn?.addEventListener('click', clearHistory);
+
+installBtn?.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    installBanner?.classList.add('hidden');
+  }
+  deferredPrompt = null;
+});
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredPrompt = event;
+  showInstallBanner();
+});
+
+window.addEventListener('appinstalled', () => {
+  installBanner?.classList.add('hidden');
+  updateModeBadge();
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  updateModeBadge();
+  showInstallBanner();
+  setTimeout(hideSplashScreen, 1000);
+});
 
 (function checkQuery() {
   try {
