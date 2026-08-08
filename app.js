@@ -46,12 +46,14 @@ async function lookup(word) {
   const dictionaryResult = await fetchFromDictionaryApi(normalized);
   if (dictionaryResult) {
     renderDictionary(dictionaryResult, normalized);
+    addToHistory(normalized);
     return;
   }
 
   const wiktionaryResult = await fetchFromWiktionary(normalized);
   if (wiktionaryResult) {
     renderDictionary(wiktionaryResult, normalized);
+    addToHistory(normalized);
     return;
   }
 
@@ -333,6 +335,7 @@ window.addEventListener('appinstalled', () => {
 
 window.addEventListener('DOMContentLoaded', () => {
   updateModeBadge();
+  renderHistory();
   showInstallBanner();
   setTimeout(hideSplashScreen, 1000);
 });
